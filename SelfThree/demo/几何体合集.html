@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./../../build/three.js"></script>
+    <script src="./../../examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <script>
+        /*   1.渲染器
+             2.场景
+             3.相机
+             4.
+        */
+        //创建场景
+        var scene = new THREE.Scene();
+
+        //添加辅助线 
+        var helper = new THREE.AxesHelper(150);
+        scene.add(helper);
+
+        //创建光源
+        var point = new THREE.PointLight(0xffffff);
+        point.position.set(50,100,50);
+        scene.add(point);
+
+        //创建相机
+        var camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.set(18,15,40);
+        camera.lookAt(0,0,0);
+
+        //创建渲染对象
+        var renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.setClearColor(0x2F2F4F);
+        document.body.appendChild(renderer.domElement);
+        renderer.render(scene,camera);
+
+        //创建控制器
+        var controls = new THREE.OrbitControls(camera,renderer.domElement);
+
+        //渲染函数
+        function animate()
+        {
+           renderer.render(scene,camera);
+           requestAnimationFrame(animate);
+        }
+        animate();
+
+        //创建放几何体的平面
+        var plane = new THREE.PlaneGeometry(80,60,1,1);//长宽
+        var planeMaterial = new THREE.MeshPhongMaterial({color:0xE6E8FA,side:THREE.DoubleSide});
+        var planeMesh = new THREE.Mesh(plane,planeMaterial);//网络模型对象
+        planeMesh.position.set(0,0,0);
+        planeMesh.rotation.x -= 0.5*Math.PI;
+        scene.add(planeMesh);
+
+        /*盒子*/
+        var box = new THREE.BoxGeometry(10,10,10);
+        var boxMaterial = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var boxMesh = new THREE.Mesh(box,boxMaterial);
+        //var widthsegments = new THREE.widthSegments(2);
+        boxMesh.position.set(-20,5,-20);
+        scene.add(boxMesh);
+
+        /* 平面圆*/ 
+        /*整圆*/
+        var circle = new THREE.CircleGeometry(10,30);
+        var circleMaterial = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var circleMesh = new THREE.Mesh(circle,circleMaterial);
+        circleMesh.position.set(0,5,-20);
+        circleMesh.rotation.x -= Math.PI/3;
+        scene.add(circleMesh);  
+        /*四分之一圆*/
+        var circle_ = new THREE.CircleGeometry(10,30,Math.PI*0.25,Math.PI*1.5);//半径，切片数，开始弧度，经过的弧度
+        var circleMaterial_ = new THREE.MeshPhongMaterial({color:'pink',side:THREE.DoubleSide});
+        var circleMesh_ = new THREE.Mesh(circle_,circleMaterial_);
+        circleMesh_.position.set(20,5,-20);
+        circleMesh_.rotation.x -= Math.PI/3;
+        scene.add(circleMesh_);
+
+        /*球体*/
+        var sphereGeometry = new THREE.SphereGeometry(5,50,50,0,Math.PI*1.5,0,Math.PI);
+        var sphereGeometry_Material = new THREE.MeshPhongMaterial({color:'red',side:THREE.DoubleSide});
+        var sphereGeometry_Mesh = new THREE.Mesh(sphereGeometry,sphereGeometry_Material);
+        sphereGeometry_Mesh.position.set(-20,5,0);
+        sphereGeometry_Mesh.rotation.y = Math.PI;
+        scene.add(sphereGeometry_Mesh);
+
+        /*锥体*/
+        var cone = new THREE.ConeGeometry(6,8,16,2,true,Math.PI*0.25,Math.PI*1.5);//半径、高度、纵向分割数、横向分割数、是否封顶、圆锥的起始坐标、经过的总弧度
+        var cone_material = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var cone_Mesh = new THREE.Mesh(cone,cone_material);
+        cone_Mesh.position.set(0,7,0);
+        cone_Mesh.rotation.z += Math.PI/6;
+        cone_Mesh.rotation.y += Math.PI/3;
+        scene.add(cone_Mesh);
+
+        /*圆柱*/
+        var radiusTop = 4;
+        var radiusBottom = 4;
+        var height = 10;
+        var radialSegments = 12;
+        var heightSegments = 2;
+        var openEnded = false;//是否封顶
+        var thetaStart = Math.PI*0.25;
+        var thetaLength = Math.PI*1.5;
+        var cylinder = new THREE.CylinderGeometry(radiusTop,radiusBottom,height,radialSegments,heightSegments,openEnded,thetaStart,thetaLength);
+        var cylinder_Material = new THREE.MeshPhongMaterial({color:'blue',side:THREE.DoubleSide});
+        var cylinder_Mesh = new THREE.Mesh(cylinder,cylinder_Material);
+        cylinder_Mesh.position.set(20,6,0);
+        scene.add(cylinder_Mesh);
+
+        /*八面体*/
+        var Octahedron = new THREE.OctahedronGeometry(4.5);
+        var Octahedron_Material = new THREE.MeshPhongMaterial({color:'MediumSpringGreen',side:THREE.DoubleSide});
+        var Octahedron_Mesh = new THREE.Mesh(Octahedron,Octahedron_Material);
+        Octahedron_Mesh.position.set(0,5,25);
+        scene.add(Octahedron_Mesh);
+
+        /*十二面体*/
+        var Dodecahedron = new THREE.DodecahedronGeometry(4);
+        var Dodecahedron_Material = new THREE.MeshPhongMaterial({color:'purple',side:THREE.DoubleSide});
+        var Dodecahedron_Mesh = new THREE.Mesh(Dodecahedron,Dodecahedron_Material);
+        Dodecahedron_Mesh.position.set(-20,4,15);
+        scene.add(Dodecahedron_Mesh);
+
+        /*十二面体加强版*/
+        var Dodecahedron2 = new THREE.DodecahedronGeometry(4,1);
+        var Dodecahedron2_Material = new THREE.MeshPhongMaterial({color:'green',side:THREE.DoubleSide});
+        var Dodecahedron2_Mesh = new THREE.Mesh(Dodecahedron2,Dodecahedron2_Material);
+        Dodecahedron2_Mesh.position.set(0,4,15);
+        scene.add(Dodecahedron2_Mesh);
+
+        /*二十面体*/
+        var Icosahedron = new THREE.IcosahedronGeometry(3.5,1);
+        var Icosahedron_Material = new THREE.MeshPhongMaterial({color:'HotPink',side:THREE.DoubleSide});
+        var Icosahedron_Mesh = new THREE.Mesh(Icosahedron,Icosahedron_Material);
+        Icosahedron_Mesh.position.set(20,3.5,15);
+        scene.add(Icosahedron_Mesh);
+
+        /*车床*/
+        var points = [];
+        for(var i=0;i<10;++i){
+       points.push(new THREE.Vector2(Math.sin(i*0.2)*1+3,(i-5)*.8));
+        }
+        var Lathe = new THREE.LatheGeometry(points);
+        var Lathe_Material = new THREE.MeshPhongMaterial({color:'Cyan',size:THREE.DoubleSide});
+        var Lathe_Mesh = new THREE.Mesh(Lathe,Lathe_Material);
+        Lathe_Mesh.position.set(-20,5,24.5);
+        scene.add(Lathe_Mesh);
+
+        /*心型*/
+        var heart = new THREE.Shape();
+        var x = -1;
+        var y = 0;
+        heart.moveTo(x + 2.5,y+2.5);
+        heart.bezierCurveTo(x+2.5,y+2.5,x+2,y,x,y);
+        heart.bezierCurveTo(x-3,y,x-3,y+3.5,x-3,y+3.5);
+        heart.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+        heart.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+        heart.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+        heart.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+        var extrudeSettings = {
+            step:2,
+            depth:2,
+            bevelEnabled:true,
+            bevelThickness:1,
+            bevelSize:1,
+            bevelSegments:2,
+        };
+        var geometry = new THREE.ExtrudeGeometry(heart,extrudeSettings);
+        var heart_Material = new THREE.MeshPhongMaterial({color:"red",side:THREE.DoubleSide});
+        var heart_Mesh = new THREE.Mesh(geometry,heart_Material);
+        heart_Mesh.position.set(20,3.5,24);
+        scene.add(heart_Mesh);
+    </script>
+</body>
+</html>

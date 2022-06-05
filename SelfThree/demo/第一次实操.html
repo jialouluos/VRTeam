@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/three.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+ //输入玲玲的年龄并弹出
+        /*
+        var age;
+        age=prompt('请输入您的年龄')
+        alert('玲玲今年'+age+'岁了!');
+        console.log(age)
+        */
+
+//不同情况弹出NAN、undefined、null
+        /*
+        var a='1';
+        var b;
+        console.log(100+'你好呀');
+        console.log(c)
+        console.log(b)
+        */
+
+//判断非数字isNaN,非-返回t，数字-返回f
+        /*
+        console.log(isNaN(12))
+        console.log(isNaN('pink'))
+        */
+
+//字符串型
+        /*
+        var str = '我是玲玲，我爱吃榴莲和螺蛳粉，还喜欢"高富帅"'
+        console.log(str)
+        var s = '我要实现从这里换行，我是第一行\n我是第二行'
+        console.log(s)
+        var l = 'my name is lingling'
+        console.log(l.length)
+        */
+
+//字符串和数字的拼接及运算
+        /*
+        var age = 20;
+        console.log(12+12);//24
+        console.log(12+'12');//1212
+        console.log('hello'+' '+'world'+'!');//hello world!
+        console.log('玲玲'+age+'岁');//玲玲20岁
+        */
+
+     //bolean以及undefined和null
+        /*
+        var flag = true;//布尔型，值为1
+        var flag1 = false;//值为0
+        console.log(flag+1);//2
+        console.log(flag1+1);//1
+        var a;
+        console.log(a);//undefined-定义变量未赋值
+        console.log(a+'baby');//undefinedbaby-同类型相加
+        console.log(a+1);//NaN-不同类型的数据相加
+        var b= null;
+        console.log(b + 'pink')//nullpink
+        console.log(b + 2)//2        
+        */
+
+//利用new object 创建对象
+        /*
+        var obj = new Object();
+        obj.name = '张三';
+        obj.age = 18;
+        obj.SayHi = function() {
+            console.log('hi~');
+        }
+        console.log(obj.name);
+        console.log(obj.age);
+        obj.SayHi();
+        */
+//构造函数-把对象里面相通的属性和方法封装起来放进函数中
+       /*
+       语法规范：
+           function 构造函数名（）{
+               this.属性 = 值；
+               this.方法 = function(){}
+           }
+           new 构造函数名（）；
+            var zxy={
+            uname:'张学友',
+            age:58,
+            sing : function(){
+                console.log('李香兰')
+            }
+        }*/
+        /*
+        function Star(uname,age,sex){//函数名首字母必须大写
+            this.name = uname;
+            this.age = age;
+            this.sex = sex;
+            this.sing = function(sang){
+                console.log(sang);
+            }
+        } 
+        var ldh = new Star('刘德华',18,'男');
+        console.log(typeof ldh);
+        console.log(ldh.name);
+        console.log(ldh.age);
+        console.log(ldh.sex);
+        var zxy = new Star ('张学友',19,'男');
+        console.log(zxy.name);
+        zxy.sing('冰雨');
+        */
+//遍历对象
+       /*模板 for(变量 in 对象){
+           console.log(k);
+       }*/
+       /*
+       var obj = {
+            name: 'pin老师',
+            age: 18,
+            sex:'男',
+            fn: function(){}
+       }
+       for(var k in obj)
+       {
+           console.log(k);//输出变量名
+           console.log(obj[k]);//输出值
+       }
+       */
+
+//返回字符串所有o的位置
+       /*var num=0;
+       var str="avdovdnxoswjcoswo";
+       var index = str.indexOf('o');//查找第一个o，index=3
+       while(index !==-1){//到最后一个也找不到时index=-1
+           console.log(index);
+           index=str.indexOf('o',index+1);//index+1
+           num++;
+       }
+       console.log('o出现的次数是:'+num+'次');*/
+
+//根据位置返回字符
+/*
+       var str='andy';
+       console.log(str.charAt(0));//charAt(index)根据位置返回字符
+       //遍历所有字符
+       for(var i=0;i<str.length;i++)
+       {
+           console.log(str.charAt(i));
+       }
+       console.log(str.charCodeAt(0));//charCodeAt(index)返回相应索引号字符的ASCII值 目的：判断用户按下了哪个键
+       console.log(str[0]);//用法和charAt一致
+*/
+
+//求字符串中出现次数最多的字符，并统计其次数
+/*
+    var str='advgrmghsodefhicbaopxaaqaa';
+    var o = {};
+    for(var i = 0;i<str.length;i++)
+    {
+        var chars = str.charAt(i);
+        if(o[chars])//chars是字符串中的每一个字符
+        {
+            o[chars]++;
+        }
+        else
+        {
+            o[chars]=1;
+        }  
+    }
+    console.log(o);
+    var max = 0;
+    var ch = 0;
+    for(var k in o)//遍历对象，k表示属性名,例如o里面的字母abc
+    {
+        if(o[k]>max)
+        {
+            max=o[k];
+            ch=k;//k只在for里管用，所以要拿出来
+        }       
+    }
+    console.log('出现次数最多的字母是'+ch+'，出现了'+max+'次');
+*/
+
+//字符串的拼接
+/*
+    var str = 'andy';
+    console.log(str.concat('red'));//相当于之前的加号
+    var stri = 'adfghjkll';
+    console.log(stri.substr(1,3));//substr(star,length)，从几号索引号开始，索引输出length个取得字符
+    console.log(stri.slice(2,4));//从2号到4号，左闭右开
+*/
+
+//替换字符串以及转换为数组
+/*
+    var str ='andy';
+    console.log(str.replace('a','b'));//将a字符替换为b，但是只替换索引到的第一个字符
+    var str1 = 'asdfasdasdfa';
+    while(str1.indexOf('a')!==-1)//indexOf检测指定字符是否在字符串中，若不在则返回-1
+    {
+       str1 = str1.replace('a','*');
+    }
+    console.log(str1);
+    //split('分隔符')  数组转化为字符———join
+    var str2 = 'red,black,pink';
+    console.log(str2.split(','));//与原字符str2  间的分隔符保持一致
+*/
+    console.log('打印场景API',THREE.Scene);
+    </script>
+</body>
+</html>

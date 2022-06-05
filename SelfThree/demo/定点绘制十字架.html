@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定点绘制立方体</title>
+    <script src="./../../build/three.js"></script>
+    <script src="./../../examples/js/controls/OrbitControls.js"></script>
+    <script src="./../../examples/js/libs/dat.gui.min.js"></script>
+    <script src="./../../examples/js/libs/stats.min.js"></script>
+</head>
+<body>
+    <script>
+        var renderer;
+        function initRender()
+        {
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+        }
+
+        var camera;
+        function initCamera()
+        {
+            camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
+            camera.position.set(30,20,100);
+            camera.lookAt(new THREE.Vector3(0,0,0));
+        }
+
+        var scene;
+        function initScene()
+        {
+            scene = new THREE.Scene();
+        }
+
+        var light;
+        function initLight()
+        {
+            light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(0,300,200);
+            scene.add(light);
+        }
+
+        var cross,group,cross2;
+        function initModel()
+        {
+            var helper = new THREE.AxesHelper(20);
+            scene.add(helper);
+
+            //立方体
+            var crossGeometry = new THREE.BufferGeometry();
+            //开始创建面
+            var points = [
+                //正面
+                new THREE.Vector3(-15,5,5),
+                new THREE.Vector3(-15,-5,5),
+                new THREE.Vector3(15,5,5),
+                new THREE.Vector3(15,5,5),
+                new THREE.Vector3(-15,-5,5),
+                new THREE.Vector3(15,-5,5),
+                //背面
+                new THREE.Vector3(15,5,-5),
+                new THREE.Vector3(15,-5,-5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(15,5,-5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(-15,5,-5),
+                //上面
+                new THREE.Vector3(-15,5,-5),
+                new THREE.Vector3(-15,5,5),
+                new THREE.Vector3(15,5,-5),
+                new THREE.Vector3(15,5,-5),
+                new THREE.Vector3(-15,5,5),
+                new THREE.Vector3(15,5,5),
+                //下面
+                new THREE.Vector3(15,-5,5),
+                new THREE.Vector3(-15,-5,5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(15,-5,5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(15,-5,-5),
+                //左边
+                new THREE.Vector3(-15,5,5),
+                new THREE.Vector3(-15,5,-5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(-15,5,5),
+                new THREE.Vector3(-15,-5,-5),
+                new THREE.Vector3(-15,-5,5),
+                //右边
+                new THREE.Vector3(15,5,-5),
+                new THREE.Vector3(15,5,5),
+                new THREE.Vector3(15,-5,-5),
+                new THREE.Vector3(15,5,5),
+                new THREE.Vector3(15,-5,5),
+                new THREE.Vector3(15,-5,-5),
+            ]
+                var array = [];
+                points.forEach(e => {
+                    array.push(e.toArray());
+                })
+                var newArray = new Float32Array(array.flat());
+                crossGeometry.setAttribute('position',new THREE.BufferAttribute(newArray,3));
+
+            //十字架的材质和位置
+            var crossMatrial = new THREE.MeshBasicMaterial({color:"#ff0000"});
+            cross = new THREE.Mesh(crossGeometry,crossMatrial);
+            scene.add(cross);
+//原因是 其他材质会受光照影响，但是受光照影响必须要有法向量，我门自定义的几何体只传入了position 没有该几何体的法向量数据，所以对于这个几何体就算有了光照还是表现为没光照
+//有一种简单的方法，基础材质 不受光照影响，会直接表现为传入的颜色color:"#ff0000" 所以可以直接用基础材质
+//底部平面
+
+            //第二个长方体
+            cross2 = cross.clone();
+            cross2.position.set(0,0,0);
+            cross2.rotation.z = Math.PI*0.5;
+            scene.add(cross2);
+
+            //包装十字架
+            group = new THREE.Group();
+            group.add(cross);
+            group.add(cross2);
+            scene.add(group);
+
+            var planeGeometry = new THREE.PlaneGeometry(100,100);
+            var PlaneMaterial = new THREE.MeshStandardMaterial({color:"Silver",side:THREE.DoubleSide});
+            var plane = new THREE.Mesh(planeGeometry,PlaneMaterial);
+            plane.rotation.x = -0.5*Math.PI;
+            plane.receiveShadow = true;
+            scene.add(plane);
+
+        }
+
+        var gui;
+        function initGui()
+        {
+            gui = {
+                lightY:30,
+                lightZ:20,
+                groupX:0,
+                groupY:15,
+                groupZ:0, 
+                color: "#ff0000", 
+                v1 : 1,
+                v2 : 1,
+                v3 : 1, 
+            };
+            
+            var datGui = new dat.GUI();
+            datGui.add(gui,"lightY",0,100);
+            datGui.add(gui,"lightZ",-50,50);
+            datGui.add(gui,"groupX",-30,30);
+            datGui.add(gui,"groupY",-30,30);
+            datGui.add(gui,"groupZ",-30,30);
+
+            datGui.addColor(gui,"color").onChange(e=>{
+                 cross.material.color = new THREE.Color(e);
+            })
+
+            datGui.add(gui,"v1",0.01,5),
+            datGui.add(gui,"v2",0.01,5),
+            datGui.add(gui,"v3",0.01,5)
+        }
+
+        var stats;
+        function initStats()
+        {
+            stats = new Stats();
+            document.body.appendChild(stats.dom);
+        }
+
+        var controls;
+        function initControls()
+        {
+            controls = new THREE.OrbitControls(camera,renderer.domElement);
+        }
+
+        function render()
+        {
+            renderer.render(scene,camera);
+        }
+
+        //窗口变动触发的函数
+        function onWindowResize()
+        {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth,window.innerHeight);
+        }
+
+        function animate()
+        {
+            //更新控制器
+            render();
+            //更新性能插件
+            stats.update();
+            //更新相关位置
+            light.position.y = gui.lightY;
+            light.position.z = gui.lightZ;
+            group.position.x = gui.groupX;
+            group.position.y = gui.groupY;
+            group.position.z = gui.groupZ;
+            //更新十字架xyz比例
+            group.scale.set(gui.v1,gui.v2,gui.v3);
+
+            controls.update();
+
+            requestAnimationFrame(animate);//请求桢动画
+        }
+
+        function draw()
+        {
+            initGui();
+            initRender();
+            initScene();
+            initCamera();
+            initLight();
+            initModel();
+            initControls();
+            initStats();
+
+            animate();
+            window.onresize = onWindowResize;
+        }
+        draw();
+    </script>
+</body>
+</html>

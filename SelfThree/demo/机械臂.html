@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机械臂</title>
+    <script src="./../../build/three.js"></script>
+    <script src="./../../examples/js/controls/OrbitControls.js"></script><!--引入控制器-->
+    <script src="./../../examples/js/libs/dat.gui.min(1).js"></script>
+</head>
+<body>
+    <script>
+       var gui = new dat.GUI(); 
+    //创建场景
+        var scene = new THREE.Scene();    
+        var helper = new THREE.AxesHelper(100);
+        scene.add(helper);
+    //创建gui--控制参数
+        //var gui = new THREE.GUI();
+
+    //创建光源
+        var point = new THREE.PointLight(0xffffff);
+        point.position.set(300,40,300);
+        scene.add(point);
+
+    //平面
+        var geometry = new THREE.PlaneGeometry(30,20,1,1);//宽，长，横向分段，纵向分段
+        var material = new THREE.MeshBasicMaterial({color:0xffff00,side:THREE.DoubleSide});
+        var mesh = new THREE.Mesh(geometry,material);//网络模型对象
+        mesh.position.y = -5;
+        mesh.rotation.x = -0.5*Math.PI;
+        scene.add(mesh);
+        //使用gui
+        // var obj = {
+        //     x: 0
+        // }
+        // gui.add(obj,'x',0,360);
+
+    //球体
+        var sphereGeometry = new THREE.SphereGeometry(2,32,32);//第一个参数是圆的半径，后面的参数越大越像圆
+        var sphereMaterial = new THREE.MeshLambertMaterial({color:'aqua',side:THREE.DoubleSide});
+        var sphereMesh = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        sphereMesh.position.set(0,6.5,0);
+        // gui.add(sphereMesh.position,'x',-1,20,0.5);
+        // gui.add(sphereMesh.position,'y',0,20,0.5);
+        // gui.add(sphereMesh.position,'z',0,20,0.5);
+        sphereMesh.castShadow = true;//开启阴影      
+        scene.add(sphereMesh);
+
+    //竖直立方体
+        var cubeGeometry1 = new THREE.BoxGeometry(3,10,3);
+        var cubeMaterial1 = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+        var cubeMesh1 =new THREE.Mesh(cubeGeometry1,cubeMaterial1);
+        cubeMesh1.position.set(0,0,0);
+        cubeMesh1.castShadow = true;
+        scene.add(cubeMesh1);
+
+    //倾斜立方体
+        var cubeMesh2 = cubeMesh1.clone();
+        cubeMesh2.position.set(0,6,3);
+        cubeMesh2.rotation.x += Math.PI/6;
+        // gui.add(cubeMesh2.position,'x',-1,20,0.5);
+        // gui.add(cubeMesh2.position,'y',-10,20,0.5);
+        // gui.add(cubeMesh2.position,'z',0,20,0.5);
+        scene.add(cubeMesh2);
+
+    //设置相机
+        var camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);//一般我们都是用透视相机(PerspectiveCamera)，不用正交相机(OrthographicCamera)
+        camera.position.set(6,15,30);//相机所在位置
+        camera.lookAt(0,0,0);//相机朝向
+        
+    //创建渲染对象
+        var renderer = new THREE.WebGLRenderer({antialias:true});//抗锯齿
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.setClearColor('pink');
+        document.body.appendChild(renderer.domElement);
+    //渲染函数 
+        renderer.render(scene,camera);//每调用一次相当于拍下一张照片
+        
+    //创建控制器
+        var controls = new THREE.OrbitControls(camera,renderer.domElement);
+        function animate_(){//ani相当于动画//这里不写，画面永远不会更新
+            renderer.render(scene,camera);
+            requestAnimationFrame(animate_)//一秒钟调用60次左右，与电脑配置有关
+        }
+         window.onload = animate_();//调用函数
+        
+    //创建键盘事件
+             /*S键——上面的长方体绕x轴旋转（顺时针）*/
+        sphereMesh.add(cubeMesh2);
+        function animate_s(){
+             sphereMesh.rotation.x -=0.1;
+        }
+             /*d键——上面的长方体绕y轴旋转（逆时针）*/
+        function animate_d(){
+            sphereMesh.rotation.y +=0.1;
+        }
+            /*r——整个机械臂朝x轴正半轴移动10*/
+        function animate_r(){
+           mesh.position.x += 10;
+           sphereMesh.position.x += 10;
+           cubeMesh1.position.x += 10;
+        }
+            /*t——除了平面外其他绕y轴旋转*/
+        function animate_t(){
+           cubeMesh1.rotation.y +=0.1;
+           cubeMesh2.rotation.y =+0.1;
+           sphereMesh.rotation.y +=0.1;
+        }
+            /*a——生成一个小球*/
+         function animate_a(){
+            var sphere2 = new THREE.SphereGeometry();
+            var sphereMarial2 = new THREE.MeshLambertMaterial({color:'aqua',side:THREE.DoubleSide});
+            var sphereMesh2 = new THREE.Mesh(sphereGeometry,sphereMaterial);
+            sphereMesh2.position.copy(cubeMesh1.position);//坐标克隆
+            sphereMesh2.position.y = -3;
+            sphereMesh2.position.x += 15;
+        //  gui.add(sphereMesh2.position,'x',-1,20,0.5);
+        //  gui.add(sphereMesh2.position,'y',-10,20,0.5);
+        //  gui.add(sphereMesh2.position,'z',0,20,0.5);
+         scene.add(sphereMesh2);
+        }
+
+        document.addEventListener("keydown",keyboard);//监视键盘的输入
+        function keyboard(event){
+            var key = event.keyCode;
+           
+               if (key == 83){
+                    animate_s()
+               }//'s'
+               if ( key == 68){
+                    animate_d()
+               }//'d'
+               if (key == 82){
+                animate_r()
+               }//'r'
+               if(key == 84){
+                animate_t()
+               }//'t'
+               if(key == 77){
+                sphereMesh.material.color = new THREE.Color('red');
+               }//'m'
+               if(key == 65){
+                 animate_a()
+               }//'a'          
+        }
+    
+    </script>
+</body>
+</html>
+
+
