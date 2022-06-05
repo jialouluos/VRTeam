@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美丽的字体</title>
-    <script src="./../../build/three.js"></script>
-    <script src="./../../examples/js/controls/OrbitControls.js"></script>
-    <script src="./../../examples/js/loaders/FontLoader.js"></script>
-    <script src="./../../examples/js/libs/stats.min.js"></script>
-    <script src="./../../examples/js/geometries/TextGeometry.js"></script>
+    <script src="./../build/three.js"></script>
+    <script src="./../examples/js/controls/OrbitControls.js"></script>
+    <script src="./../examples/js/loaders/FontLoader.js"></script>
+    <script src="./../examples/js/libs/stats.min.js"></script>
+    <script src="./../examples/js/geometries/TextGeometry.js"></script>
 </head>
 <body>
     <script>
@@ -54,7 +54,7 @@
             //哪个 在当前路径(./) 往外面翻一层(../)   ./../表示现在处于了self这个目录  ./../../这个表示处于self的父目录
             //父目录 下存在build examples self 这三个 我们现在处于父目录 哪个是不是可以 ./../../examples 这样就进入了examples
             //哪个json后缀表示json文件 一种数据格式文件 可视化那边经常用这个
-            loader.load("./../../examples/fonts/gentilis_regular.typeface.json",function (res)
+            loader.load("./../examples/fonts/gentilis_regular.typeface.json",function (res)
             {
                 font = new THREE.TextGeometry("my baby",{
                     font:res,
@@ -64,7 +64,7 @@
 
                 font.computeBoundingBox();
 
-                var map = new THREE.TextureLoader().load("./../素材/waternormals.jpg");
+                var map = new THREE.TextureLoader().load("./../素材/兰州丹霞.png");
                 var material = new THREE.MeshLambertMaterial({map:map,side:THREE.DoubleSide});
 
                 fontModel = new THREE.Mesh(font,material);
