@@ -29,6 +29,7 @@
         {
             renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
             renderer.setSize(window.innerWidth,window,innerHeight);
+            renderer.setClearColor('black');
             document.body.appendChild(renderer.domElement);
         }
 
@@ -53,14 +54,23 @@
         {
             var textureLoader = new THREE.TextureLoader();
 
-            var textureFlare3 = textureLoader.load("./../素材/光晕纹理3.png");
+            var textureFlare0 = textureLoader.load("./../素材/textures/lensflare/lensflare0.png");
+            var textureFlare2 = textureLoader.load("./../素材/textures/lensflare/lensflare2.png");
+            var textureFlare3 = textureLoader.load("./../素材/textures/lensflare/lensflare3.png");
             
             var flareColor = new THREE.Color(0xffffff);
             flareColor.setHSL(0.55,0.9,1.0);
 
             lensFlare = new Lensflare(textureFlare3,500,0.0,THREE.AdditiveBlending,flareColor);
 
+            lensFlare.addElement(new LensflareElement(textureFlare2,512,0));
+            lensFlare.addElement(new LensflareElement(textureFlare2,512,0));
+            lensFlare.addElement(new LensflareElement(textureFlare2,512,0));
+
             lensFlare.addElement(new LensflareElement(textureFlare3,60,0.6));
+            lensFlare.addElement(new LensflareElement(textureFlare3,70,0.7));
+            lensFlare.addElement(new LensflareElement(textureFlare3,120,0.9));
+            lensFlare.addElement(new LensflareElement(textureFlare3,70,1.0));
 
             light.add(lensFlare);
         }
