@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>窗口射入光线</title>
+    <script src="./build/three.js"></script>
+    <script src="./examples/js/lights/RectAreaLightUniformsLib.js"></script>
+    <script src="./examples/js/controls/OrbitControls.js"></script>
+    <script src="./examples/js/libs/stats.min.js"></script>
+    <script src="./examples/js/libs/dat.gui.min.js"></script>
+</head>
+<body>
+    <script>
+        function initRender() {
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+    }
+ 
+    var camera;
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set(0, 40, 100);
+        camera.lookAt(new THREE.Vector3(0,0,0));
+    }
+ 
+    var scene;
+    function initScene() {
+        scene = new THREE.Scene();
+    }
+ 
+    var rectLight,rectLightHelper;
+    function initLight() {
+        scene.add(new THREE.AmbientLight(0x111111));
+        rectLight = new THREE.RectAreaLight(0xffffff,500,10,10);
+        rectLight.position.set(5, 10, -20);
+        scene.add(rectLight);
+        rectLightHelper = new THREE.RectAreaLightHelper(rectLight);
+        scene.add(rectLightHelper);
+    }
+ 
+    var cube,plane;
+    function initModel() {
+        //世界坐标
+        var helper = new THREE.AxesHelper(10);
+        scene.add(helper);
+        //球体
+        var sphereGeometry = new THREE.SphereGeometry(10,30,30);
+        var sphereMaterial = new THREE.MeshStandardMaterial({color:0xff00ff});
+        var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        sphere.position.set(-20,20,-50);
+        scene.add(sphere);
+        //立方体
+        var cubeGeometry = new THREE.BoxGeometry(10,10,10);
+        var cubeMaterial = new THREE.MeshLambertMaterial({color:0x00ffff});
+        cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+        cube.position.set(30,5,-50);
+        cube.castShadow = true;
+        scene.add(cube);
+        //平面
+        var planeGeometry = new THREE.PlaneGeometry(5000,5000,20,20);
+        var planeMaterial = new THREE.MeshStandardMaterial({color:0xaaaaaa});
+        plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        plane.rotation.x=-0.5*Math.PI;
+        plane.position.y=-0;
+        plane.receiveShadow = true;
+        scene.add(plane);
+    }
+ 
+    //初始化性能插件
+    var stats;
+    function initStats() {
+        stats = new Stats();
+        document.body.appendChild(stats.dom);
+    }
+ 
+    //用户交互插件 鼠标左键按住旋转，右键按住平移，滚轮缩放
+    var controls;
+    function initControls() {
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+    }
+ 
+    function render() {
+        // rectLightHelper.update();
+        renderer.render(scene, camera);
+    }
+ 
+    //窗口变动触发的函数
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        render();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+ 
+    }
+ 
+    function animate() {
+        //更新控制器
+        controls.update();
+        render();
+ 
+        //更新性能插件
+        stats.update();
+        requestAnimationFrame(animate);
+    }
+    window.onload=animate;
+    function draw() {
+        initRender();
+        initScene();
+        initCamera();
+        initLight();
+        initModel();
+        initControls();
+        initStats();
+ 
+        animate();
+        // window.onresize = onWindowResize;
+    }
+    window.onload=draw;
+    </script>
+</body>
+</html>
