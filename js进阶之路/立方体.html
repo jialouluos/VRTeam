@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../build/three.js"></script>
+    <script src="../examples/js/libs/dat.gui.min.js"></script>
+</head>
+<body>
+    <script>
+        /**导航
+     * 第一步模板
+     * 1.渲染器
+     * 2.场景
+     * 3.相机
+     * 4.灯光 可选
+     * 5.模型 可选
+     * 6.控制器 可选
+     * 7.Stats 可选
+     * 8.Gui 可选
+     * 9.渲染函数
+     */
+
+
+     //创建渲染器
+     renderer =new THREE.webGLRenderer({antialias:true});
+     renderer.setClearColor("Green");
+     renderer.SetSize(width,height);
+     document.body.appendChild(renderer.document);
+     //创建场景
+     scene =new THREE.scene();
+     //
+    </script>
+</body>
+</html>
