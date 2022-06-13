@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../SelfThree/build/three.js"></script>
+</head>
+<body>
+    <script>
+        var width=window.innerWidth,height=window.innerWidth;
+        var renderer;
+        function initRender(){
+            renderer=new THREE.WebGLRenderer({antialias:true});
+            renderer.setClearColor("#FFFFF");
+            renderer.setSize(width,height);
+            document.body.appendChild(renderer.document);
+        }
+        var scene;
+        function initScene(){
+            scene=new THREE.Scene();
+        }
+        var camera;
+        function initCamera(){
+            camera=new THREE.PerspectiveCamera(60,width/height,1,1000);
+            camera.position.set(200,300,400);
+            camera.lookAt(0,0,0);
+        }
+        var light;
+        function initLight(){
+            light=new THREE.DirectionalLight("#fff");
+            light.position.set(200,300,400);
+            scene.add(light);
+        }
+        var controls;
+        function initControls(){
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            var stats=new Stats();
+            document.body.appendChild(stats.dom);
+        }
+        var helper;
+        function initHelper(){
+            helper = new THREE.AxesHelper(100);
+        }
+
+        function initModel(){
+            var BoxGeometry;
+            
+
+        }
+        function animate() {
+            renderer.render(scene, camera);
+            stats.update();//更新性能监测
+            geometry_2.scale.set(settings.scalex,settings.scaley,settings.scalez);
+            requestAnimationFrame(animate);//一秒钟调用60次，与电脑的配置有关 
+        }
+        initRender();
+        initScene();
+        initCamera();
+        initLight();
+        initControls();
+        initHelper();
+        initModel();
+        animate()
+    </script>
+</body>
+</html>
