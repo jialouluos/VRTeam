@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeshBasicMaterial</title>
+    <script src="./../build/three.js"></script>
+    <script src="./../examples/js/controls/OrbitControls.js"></script>
+    <script src="./../examples/js/libs/dat.gui.min.js"></script>
+    <script src="./../examples/js/libs/stats.min.js"></script>
+</head>
+<body>
+    <script>
+        var renderer;
+        function initRender()
+        {
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+        }
+        var scene;
+        function initScene()
+        {
+            scene = new THREE.Scene();
+        }
+        var camera;
+        function initCamera()
+        {
+            camera = new THREE.PerspectiveCamera(60,1,1000,window.innerWidth/window.innerHeight);
+            camera.position.set(50,100,50);
+            camera.lookAt(new THREE.Vector3(0,0,0));
+        }
+        var 
+    </script>
+</body>
+</html>
