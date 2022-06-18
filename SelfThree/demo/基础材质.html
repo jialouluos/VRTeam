@@ -17,13 +17,17 @@
         {
             renderer = new THREE.WebGLRenderer({antialias:true});
             renderer.setSize(window.innerWidth,window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+            renderer.shadowMap.enabled = true;//告诉渲染器我需要阴影。你给我生成阴影
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;//默认的没有这个清晰
+            document.body.appendChild(renderer.domElement);//在文件的body里面添加一个子元素——渲染器的canvas画布
         }
+
         var scene;
         function initScene()
         {
             scene = new THREE.Scene();
         }
+
         var camera;
         function initCamera()
         {
@@ -31,11 +35,94 @@
             camera.position.set(50,100,50);
             camera.lookAt(new THREE.Vector3(0,0,0));
         }
+
         var light;
-        function initLight( ){
+        function initLight()
+        {
             light = new THREE.PointLight(0xffffff);
-            light.position.set(20,100,10);
+            light.position.set(60,30,20);
+            light.castShadow = true;//让灯光投射阴影
+            scene.add(light);
         }
+
+        var sphere,cube,plane;
+        function initModel()
+        {
+            //辅助工具
+            var helper = new THREE.AxesHelper(10);
+            scene.add(helper);
+            //平面
+            var planeGeometry = new THREE.PlaneGeometry(5000, 5000, 20, 20);
+            var planeMaterial = new THREE.MeshPhongMaterial({color:0x708090,side:THREE.DoubleSide});
+            plane = new THREE.Mesh(planeGeometry,planeMaterial);
+            plane.receiveShadow = true;//告诉平面接受阴影
+            plane.rotation.x = -Math.PI*0.5;
+            scene.add(plane);
+            //球
+            var sphereGeometry = new THREE.SphereGeometry(5,20,20);
+            var sphereMaterial = new THREE.MeshBasicMaterial({color:0xF0F8FF,side:THREE.DoubleSide});
+            sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+            sphere.position.set(0,5,0);
+            sphere.castShadow = true;
+            scene.add(sphere);
+            //立方体
+            var cubeGeometry = new THREE.BoxGeometry(10,10,10);
+            var cubeMaterial = new THREE.MeshBasicMaterial({color:0x40E0D0,side:THREE.DoubleSide});
+            cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+            cube.position.set(30,5,-5);
+            cube.castShadow = true;
+            scene.add(cube);
+        }
+
+        var stats;
+        function initStats()
+        {
+            stats = new Stats();
+            document.body.appendChild(stats.dom);//把画布（运行效果框左上角的东东）添加到body子节点里
+        }
+
+        function render()
+        {
+            renderer.render(scene,camera);
+        }
+
+        var controls;
+        function initControls()
+        {
+            controls = new THREE.OrbitControls(camera,renderer.domElement);//将相机和渲染器的canvas画布传入
+        }
+
+        //窗口变动触发的函数
+        function onWindowResize()
+        {
+            camera.aspect = window.innerWidth/window.innerHeight;//更新相机的宽高
+            camera.updateProjectionMatrix();//更新透视矩阵
+            renderer.setSize(window.innerWidth,window.innerHeight);
+        }
+
+        function animate()
+        {
+            //更新控制器
+            controls.update();
+            render();
+            //更新性能插件
+            stats.update();
+            requestAnimationFrame(animate)//适时回调
+        }
+
+        function draw()
+        {
+            initRender();
+            initScene();
+            initCamera();
+            initLight();
+            initModel();
+            initStats();
+            initControls();
+            animate();
+            window.onresize = onWindowResize;//窗口变动回调函数
+        }
+        draw();
     </script>
 </body>
 </html>

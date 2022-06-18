@@ -121,14 +121,15 @@
        //窗口变触发的函数
        function onWindowResize()
        {
-           camera.aspect = window.innerWidth / window.innerHeight;
-           camera.updateProjectionMatrix();
-           renderer.setSize(window.innerWidth,window.innerHeight);
+           camera.aspect = window.innerWidth / window.innerHeight;//重置相机的宽高比
+           camera.updateProjectionMatrix();//更新透视矩阵
+           renderer.setSize(window.innerWidth,window.innerHeight);//设置渲染器的canvas画布大小
        }
 
        function animate()
        {
             //更新控制器
+            controls.update();
             render();
             //更新性能插件
             stats.update();
@@ -140,7 +141,7 @@
             boxMesh.position.z = gui.boxMeshZ;
 
             controls.update();
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animate);//系统适时回调函数
 
        }
 
@@ -156,7 +157,7 @@
            initGui();
 
            animate();
-           window.onresize = onWindowResize;
+           window.onresize = onWindowResize;//窗口变动回调函数
        }
        draw();
        console.log(scene.children);
