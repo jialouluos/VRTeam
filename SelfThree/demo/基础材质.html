@@ -31,7 +31,11 @@
             camera.position.set(50,100,50);
             camera.lookAt(new THREE.Vector3(0,0,0));
         }
-        var 
+        var light;
+        function initLight( ){
+            light = new THREE.PointLight(0xffffff);
+            light.position.set(20,100,10);
+        }
     </script>
 </body>
 </html>
