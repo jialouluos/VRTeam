@@ -103,7 +103,7 @@
                 crossGeometry.setAttribute('position',new THREE.BufferAttribute(newArray,3));
 
             //十字架的材质和位置
-            var crossMatrial = new THREE.MeshBasicMaterial({color:"#ff0000"});
+            var crossMatrial = new THREE.MeshBasicMaterial({color:"#ff0000",wireframe:true});//wireframe:使模型线框化
             cross = new THREE.Mesh(crossGeometry,crossMatrial);
             scene.add(cross);
 //原因是 其他材质会受光照影响，但是受光照影响必须要有法向量，我门自定义的几何体只传入了position 没有该几何体的法向量数据，所以对于这个几何体就算有了光照还是表现为没光照

@@ -31,7 +31,7 @@
         var camera;
         function initCamera()
         {
-            camera = new THREE.PerspectiveCamera(60,1,1000,window.innerWidth/window.innerHeight);
+            camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
             camera.position.set(50,100,50);
             camera.lookAt(new THREE.Vector3(0,0,0));
         }
@@ -92,6 +92,65 @@
             controls = new THREE.OrbitControls(camera,renderer.domElement);//将相机和渲染器的canvas画布传入
         }
 
+        function initGui()
+        {
+            controls = {
+                rotationSpeed: 0.02,
+                bouncingSpeed: 0.03,
+
+                opacity: sphere.material.opacity,
+                transparent: sphere.material.transparent,
+                overdraw: sphere.material.overdraw,
+                visible: sphere.material.visible,
+                side: "front",
+
+                color: sphere.material.color.getStyle(),
+                wireframe: sphere.material.wireframe,
+                wireframeLinewidth: sphere.material.wireframeLinewidth,
+                wireFrameLineJoin: sphere.material.wireframeLinejoin,
+            };
+
+            var gui = new dat.GUI();
+            
+            var spGui = gui.addFolder("Mesh");
+            spGui.add(controls,'opacity',0,1).onChange(function (e){
+                sphere.material.opacity = e
+            });
+            spGui.add(controls,'wireframe').onChange(function(e){
+                sphere.material.transparent = e
+            });
+            spGui.add(controls, 'wireframe').onChange(function (e) {
+                sphere.material.wireframe = e
+            });
+            spGui.add(controls, 'wireframeLinewidth', 0, 20).onChange(function (e) {
+                sphere.material.wireframeLinewidth = e
+            });
+            spGui.add(controls, 'visible').onChange(function (e) {
+                sphere.material.visible = e
+            });
+            spGui.add(controls, 'side', ["front", "back", "double"]).onChange(function (e) {
+            console.log(e);
+            switch (e) {
+                case "front":
+                    sphere.material.side = THREE.FrontSide;
+                    break;
+                case "back":
+                    sphere.material.side = THREE.BackSide;
+                    break;
+                case "double":
+                    sphere.material.side = THREE.DoubleSide
+                    break;
+            }
+            sphere.material.needsUpdate = true;
+            console.log( sphere.material);
+        });
+        spGui.addColor(controls, 'color').onChange(function (e) {
+            sphere.material.color.setStyle(e)
+        });
+
+        spGui.open();
+        }
+
         //窗口变动触发的函数
         function onWindowResize()
         {
@@ -117,6 +176,7 @@
             initCamera();
             initLight();
             initModel();
+            initGui();
             initStats();
             initControls();
             animate();
