@@ -8,6 +8,7 @@
     <script src="./../build/three.js"></script>
     <script src="./../examples/js/libs/stats.min.js"></script>
     <script src="./../examples/js/libs/dat.gui.min.js"></script>
+    <script src="./../examples/js/controls//OrbitControls.js"></script>
 </head>
 <body>
     <script>
@@ -17,6 +18,7 @@
             renderer = new THREE.WebGLRenderer({antialias:true});
             renderer.setSize(window.innerWidth,window.innerHeight);
             document.body.appendChild(renderer.domElement);
+            renderer.setClearColor(0xffffff);
         }
 
         var scene;
@@ -28,9 +30,13 @@
         var camera;
         function initCamera()
         {
-            camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
-            camera.position.set(30,20,60);
+            camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+            camera.position.set(0,40,100);
             camera.lookAt(new THREE.Vector3(0,0,0));
+        }
+
+        function initControls(){
+            var controls = new THREE.OrbitControls(camera,renderer.domElement)
         }
 
         function initModel()
@@ -45,19 +51,17 @@
             {
                 var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
                 
-                cube.position.x = 800 * ( 2.0 * Math.random( ) - 1.0 );
-                cube.position.y = 800 * ( 2.0 * Math.random( ) - 1.0 );
-                cube.position.z = 800 * ( 2.0 * Math.random( ) - 1.0 );
+                cube.position.x = 800 * ( 2.0 * Math.random() - 1.0 );
+                cube.position.y = 800 * ( 2.0 * Math.random() - 1.0 );
+                cube.position.z = 800 * ( 2.0 * Math.random() - 1.0 );
 
                 cube.rotation.x = Math.random ( ) * Math.PI;
                 cube.rotation.y = Math.random ( ) * Math.PI;
-                cube.rotation.z = Math.random ( ) * Math.Pi;
-
-                cube.updateMatrix();
-
+                cube.rotation.z = Math.random ( ) * Math.PI;
                 scene.add(cube);
 
             }
+           
         }
 
         var stats;
@@ -93,10 +97,11 @@
             initCamera();
             initModel();
             initStats();
+            initControls();
             animate();
             window.onresize = onWindowResize;
         }
-        draw();
+       window.onload =  draw;
     </script>
 </body>
 </html>
