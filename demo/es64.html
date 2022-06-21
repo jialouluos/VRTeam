@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>es6</title>
+    <!-- <script src="../SelfThree/build/three.js"></script>
+    <script src="../SelfThree/examples/js/controls/OrbitControls.js"></script> -->
+
+</head>
+<body>
+    <script type="module">
+        import * as THREE from '../'
+        let renderer,scene,camera,light,model,state,gui,
+        width=window.initWidth,height=window.innerHeight;
+        // function initRender(){
+        //     renderer=new THREE.WebGLRenderer({antialias:true})
+        // }
+        const init =2;
+        const getAspect =() => window.innerWidth/window.innerHeight;
+        const getWAndH =()=>([window.innerWidth,window.innerHeight])
+        const initRender_1 = () => {
+            renderer=new THREE.WebGLRenderer({antialias:true})
+            renderer.setSize(width,height);
+            renderer.clearColor("#fff");
+            renderer.body.appendChild(renderer.domEement);//吧画布添加进body子节点
+        }
+        
+        const initScene =()=>{
+            scene=new THREE.scene();
+        }
+        const initCamera =()=>{
+            camera =new THREE.PerspectiveCamera(75,getAspect(),1,1000)
+            camera.position.set(0,20,40)
+            camera.lookAt(0,0,0)
+        }
+        const initLight=()=>{
+            scene.add(new THREE.AmbientLight("#fff"));
+            light=new THREE.DirectionalLight("#fff");
+            light.position.set(300,400,500);
+            scene.add(light);
+        }
+        const initModel=()=>{
+            const geometry=new THREE.BoxGeometry(5,5,5);
+            const material=new THREE.MeshNormalMaterial();
+            const mesh =new THREE.Mesh(geometry,material);
+            scene.add(mesh);
+        }
+        const onWindowResize=()=>{
+            camera.aspect=getAspect();
+            camera.updateProjectionMatrix();
+            renderer.setSize(...getWAndH());
+        }
+        const animate=()=>{
+
+        }
+    </script>
+    
+</body>
+</html>

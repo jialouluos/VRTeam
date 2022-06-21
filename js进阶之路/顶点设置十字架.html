@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="../build/three.js"></script>
-    <script src="../examples/js/controls/OrbitControls.js"></script>
-    <script src="../examples/js/libs/dat.gui.min.js"></script>
-    <script src="../examples/js/libs/stats.min.js"></script>
+    <script src="../SelfThree/build/three.js"></script>
+    <script src="../SelfThree/examples/js/controls/OrbitControls.js"></script>
+    <script src="../SelfThree/examples/js/libs/dat.gui.min.js"></script>
+    <script src="../SelfThree/examples/js/libs/stats.min.js"></script>
 </head>
 <body>
     <script>
@@ -20,7 +20,6 @@
         height=window.innerHeight;
         var cube
         //创建渲染器
-        //原因是 
         renderer=new THREE.WebGLRenderer({antialias:true});//抗锯齿
         renderer.setClearColor("black");//相当于是场景背景色
         renderer.setSize(width,height);

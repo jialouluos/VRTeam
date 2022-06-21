@@ -6,16 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="../SelfThree/build/three.js"></script>
+    <script src="../SelfThree/examples/js/controls/OrbitControls.js"></script>
+    <script src="../SelfThree/examples/js/libs/dat.gui.min.js"></script>
+    <script src="../SelfThree/examples/js/libs/stats.min.js"></script>
+    
 </head>
 <body>
     <script>
-        var width=window.innerWidth,height=window.innerWidth;
+        var width=window.innerWidth,height=window.innerHeight;
         var renderer;
         function initRender(){
             renderer=new THREE.WebGLRenderer({antialias:true});
-            renderer.setClearColor("#FFFFF");
+            renderer.setClearColor("green");
             renderer.setSize(width,height);
-            document.body.appendChild(renderer.document);
+            document.body.appendChild(renderer.domElement);
         }
         var scene;
         function initScene(){
@@ -24,7 +28,7 @@
         var camera;
         function initCamera(){
             camera=new THREE.PerspectiveCamera(60,width/height,1,1000);
-            camera.position.set(200,300,400);
+            camera.position.set(0, 20, 40);
             camera.lookAt(0,0,0);
         }
         var light;
@@ -34,27 +38,126 @@
             scene.add(light);
         }
         var controls;
+        var stats;
         function initControls(){
             controls = new THREE.OrbitControls(camera, renderer.domElement);
-            var stats=new Stats();
+            stats=new Stats();
             document.body.appendChild(stats.dom);
         }
         var helper;
         function initHelper(){
-            helper = new THREE.AxesHelper(100);
+            helper = new THREE.AxesHelper(1000);
+            scene.add(helper);
         }
-
         function initModel(){
-            var BoxGeometry;
+            //盒子
+            var box;
+            var BoxGeometry= new THREE.BoxGeometry(8,8,8)
+            var boxMaterial=new THREE.MeshStandardMaterial({color:"#ff0000"})
+            box = new THREE.Mesh(BoxGeometry,boxMaterial);
+            box.position.set(0,4,0);
+            scene.add(box)
+
+           
+            //平面圆
+            var circle;
+            const radius_circle = 5;
+            const segments_circle = 24;
+            const thetaStart_circle = Math.PI * 0.5; //theta的起始度数
+            const thetaLength_circle = Math.PI * 1.5;//theta的总长度
+            const CircleGeometry = new THREE.CircleGeometry(radius_circle,segments_circle,thetaStart_circle,thetaLength_circle);
+            var CircleMaterial=new THREE.MeshStandardMaterial({color:"#ff0000"})
+            circle=new THREE.Mesh(CircleGeometry,CircleMaterial);
+            circle.position.set(12,5,0);
+            scene.add(circle);
+
+            
+            //锥形
+            var Cone;
+            const radius_Cone = 5;
+            const height_Cone = 8;
+            const radialSegments_Cone= 16;
+            const ConeGeometry=new THREE.ConeGeometry(radius_Cone,height_Cone,radialSegments_Cone);
+            var ConeMaterial=new THREE.MeshStandardMaterial({color:"#ff0000"})
+            Cone=new THREE.Mesh(ConeGeometry,ConeMaterial);
+            Cone.position.set(23,4,0);
+            scene.add(Cone);
+
+
+            //圆柱
+            var Cylinder;
+            const radiusTop_Cylinder = 4;//圆柱上顶面圆半径
+            const radiusBottom_Cylinder = 4; //圆柱下底面圆半径
+            const height_Cylinder = 8;
+            const radialSegments_Cylinder = 12;  //圆半径分段数
+            const heightSegments_Cylinder = 2;  //圆高度分段数
+            const openEnded = false; 
+            const thetaStart_Cylinder = Math.PI * 0.25;  
+            const thetaLength_Cylinder = Math.PI * 1.5;
+
+            const CylinderGeometry=new THREE.CylinderGeometry(
+            radiusTop_Cylinder,
+            radiusBottom_Cylinder,
+            height_Cylinder,
+            radialSegments_Cylinder,
+            heightSegments_Cylinder,
+            openEnded,
+            thetaStart_Cylinder,
+            thetaLength_Cylinder
+            );
+            var CylinderMaterial=new THREE.MeshStandardMaterial({color:"#ff0000",side:THREE.DoubleSide})//开启双面绘制；
+            Cylinder=new THREE.Mesh(CylinderGeometry,CylinderMaterial);
+            Cylinder.position.set(34,4,0);
+            scene.add(Cylinder);
+
+            
+            //十二面体
+            var Dodecahedron;
+            const radius = 5;
+            const DodecahedronGeometry = new THREE.DodecahedronGeometry(radius);
+            const DodecahedronMaterial=new THREE.MeshStandardMaterial({color:"#ff0000"});
+            Dodecahedron=new THREE.Mesh(DodecahedronGeometry,DodecahedronMaterial);
+            Dodecahedron.position.set(0,4.7,12);
+            scene.add(Dodecahedron);
+
+
+            //心型
+            let Heart;
+            const shape =new THREE.Shape();
+            const x=-2.5;
+            const y=-5;
+            shape.moveTo(x + 2.5, y + 2.5);
+            shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y , x , y);
+            shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+            shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+            shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+            shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+            shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+
+            const extrudeSettings={
+                steps:2,
+                depth:2,
+                bevelEnabled:true,
+                bevelThickness:1,
+                bevelSize:1,
+                bevelSegments:2,
+            };
+
+            const HeartGeometry =new THREE.ExtrudeGeometry(shape,extrudeSettings);
+            const HeartMaterial =new THREE.MeshStandardMaterial({color:"#ff0000"});
+            Heart=new THREE.Mesh(HeartGeometry,HeartMaterial);
+            Heart.position.set(12,6,12);
+            scene.add(Heart);
             
 
+            //
         }
         function animate() {
             renderer.render(scene, camera);
-            stats.update();//更新性能监测
-            geometry_2.scale.set(settings.scalex,settings.scaley,settings.scalez);
-            requestAnimationFrame(animate);//一秒钟调用60次，与电脑的配置有关 
+            stats.update();
+            requestAnimationFrame(animate);
         }
+
         initRender();
         initScene();
         initCamera();
